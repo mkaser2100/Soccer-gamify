@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Player Training Hub</title>
+  <style>
+    :root {
+      --bg: #070b13;
+      --card: rgba(255,255,255,0.08);
+      --card2: rgba(255,255,255,0.13);
+      --text: #f7f7fb;
+      --muted: #b9c0d4;
+      --accent: #52ff9f;
+      --accent2: #43b8ff;
+      --danger: #ff5a7a;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(82,255,159,.22), transparent 35%),
+        radial-gradient(circle at top right, rgba(67,184,255,.25), transparent 35%),
+        linear-gradient(135deg, #07111f, #070b13 55%, #05070c);
+      min-height: 100vh;
+    }
+
+    .app {
+      width: min(1120px, 92vw);
+      margin: 0 auto;
+      padding: 28px 0 60px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #06101a;
+      font-weight: 900;
+      box-shadow: var(--shadow);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      line-height: 1.1;
+    }
+
+    .brand span {
+      color: var(--muted);
+      font-size: .86rem;
+    }
+
+    .player-box {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    input, select, textarea {
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 14px;
+      outline: none;
+      font-size: .95rem;
+    }
+
+    textarea {
+      min-height: 86px;
+      resize: vertical;
+      width: 100%;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      color: #06101a;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      font-weight: 800;
+      border-radius: 14px;
+      padding: 12px 16px;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+    button.secondary {
+      color: var(--text);
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.12);
+    }
+
+    button.danger {
+      background: rgba(255,90,122,.18);
+      color: #fff;
+      border: 1px solid rgba(255,90,122,.35);
+    }
+
+    .hero {
+      padding: 34px;
+      border-radius: 32px;
+      background: linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.06));
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.12);
+      margin-bottom: 24px;
+    }
+
+    .hero h2 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 5vw, 4rem);
+      letter-spacing: -0.055em;
+      line-height: .95;
+    }
+
+    .hero p {
+      color: var(--muted);
+      margin: 0;
+      font-size: 1.08rem;
+      max-width: 720px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin: 24px 0;
+    }
+
+    .stat, .card {
+      border: 1px solid rgba(255,255,255,.12);
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .stat {
+      padding: 18px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.8rem;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: .86rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 20px;
+    }
+
+    .card {
+      padding: 22px;
+    }
+
+    .card h3 {
+      margin: 0 0 14px;
+      font-size: 1.25rem;
+    }
+
+    .topics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .topic {
+      text-align: left;
+      padding: 18px;
+      border-radius: 20px;
+      background: var(--card2);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--text);
+    }
+
+    .topic small {
+      display: block;
+      color: var(--muted);
+      margin-top: 5px;
+      font-weight: 500;
+    }
+
+    .plan-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 8px 11px;
+      background: rgba(82,255,159,.14);
+      color: var(--accent);
+      font-weight: 800;
+      font-size: .78rem;
+    }
+
+    .steps {
+      display: grid;
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.08);
+    }
+
+    .step input {
+      width: 20px;
+      height: 20px;
+      accent-color: #52ff9f;
+    }
+
+    .step b { display: block; }
+    .step span {
+      display: block;
+      color: var(--muted);
+      font-size: .9rem;
+      margin-top: 3px;
+    }
+
+    .minutes {
+      color: var(--accent);
+      font-weight: 900;
+    }
+
+    .timer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(67,184,255,.12);
+      border: 1px solid rgba(67,184,255,.2);
+      margin: 16px 0;
+    }
+
+    .time {
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: -.04em;
+    }
+
+    .log-list {
+      display: grid;
+      gap: 10px;
+      max-height: 420px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .log-item {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .log-item b { display: block; }
+    .log-item span {
+      color: var(--muted);
+      font-size: .85rem;
+    }
+
+    .empty {
+      color: var(--muted);
+      border: 1px dashed rgba(255,255,255,.18);
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .hidden { display: none; }
+
+    @media (max-width: 860px) {
+      header, .player-box { align-items: stretch; flex-direction: column; }
+      .grid, .stats, .topics { grid-template-columns: 1fr; }
+      .hero { padding: 24px; }
+      input { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <div class="brand">
+        <div class="logo">⚽</div>
+        <div>
+          <h1>Player Training Hub</h1>
+          <span>20-minute at-home soccer workouts</span>
+        </div>
+      </div>
+      <div class="player-box">
+        <input id="playerName" placeholder="Player name" />
+        <button onclick="savePlayer()">Save</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <h2>Train sharp. Track progress. Build confidence.</h2>
+      <p>Pick a topic, complete the 20-minute session, and log your work. Small consistent training adds up fast.</p>
+    </section>
+
+    <section class="stats">
+      <div class="stat"><strong id="totalSessions">0</strong><span>Sessions completed</span></div>
+      <div class="stat"><strong id="totalMinutes">0</strong><span>Total minutes</span></div>
+      <div class="stat"><strong id="streak">0</strong><span>Day streak</span></div>
+      <div class="stat"><strong id="favorite">—</strong><span>Favorite topic</span></div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h3>Choose today’s training topic</h3>
+        <div class="topics" id="topics"></div>
+      </div>
+
+      <div class="card">
+        <h3>Training log</h3>
+        <div class="log-list" id="logList"></div>
+        <button class="danger" style="margin-top:14px;" onclick="clearLog()">Clear log</button>
+      </div>
+    </section>
+
+    <section class="card hidden" id="planCard" style="margin-top:20px;">
+      <div class="plan-title">
+        <h3 id="planName">Training Plan</h3>
+        <span class="pill">20 MINUTES</span>
+      </div>
+
+      <div class="timer">
+        <div>
+          <div class="time" id="timer">20:00</div>
+          <small style="color:var(--muted)">Use this as your workout clock.</small>
+        </div>
+        <div class="row">
+          <button onclick="startTimer()">Start</button>
+          <button class="secondary" onclick="pauseTimer()">Pause</button>
+          <button class="secondary" onclick="resetTimer()">Reset</button>
+        </div>
+      </div>
+
+      <div class="steps" id="steps"></div>
+
+      <label for="notes">Session notes</label>
+      <textarea id="notes" placeholder="What felt good? What was hard? What should you keep working on?"></textarea>
+
+      <div class="row" style="margin-top:14px;">
+        <button onclick="completeSession()">Complete Session</button>
+        <button class="secondary" onclick="hidePlan()">Close</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const plans = {
+      "Ball Mastery": {
+        emoji: "🔥",
+        description: "Touches, control, quick feet",
+        steps: [
+          ["Warm-Up Touches", "Toe taps, foundations, sole rolls. Keep your knees bent and touches light.", 5],
+          ["Control Moves", "Pull-pushes, V-pulls, inside-outside touches. Use both feet.", 5],
+          ["Skill Moves", "Scissors, stepovers, drag backs. Start smooth, then increase speed.", 5],
+          ["Speed Challenge", "30 seconds fast / 30 seconds rest. Count clean touches and beat your score.", 5]
+        ]
+      },
+      "Passing & Receiving": {
+        emoji: "🎯",
+        description: "Wall work and first touch",
+        steps: [
+          ["Two-Touch Passing", "Pass against a wall. First touch across your body, second touch pass.", 5],
+          ["Inside Foot Accuracy", "Aim for a small target. Lock your ankle and pass cleanly.", 5],
+          ["Receive and Turn", "First touch away from pressure, open hips, then pass.", 5],
+          ["Weak Foot Reps", "Use only your weaker foot. Quality over power.", 5]
+        ]
+      },
+      "1v1 Moves": {
+        emoji: "⚡",
+        description: "Confidence beating defenders",
+        steps: [
+          ["Body Feints", "Drop your shoulder, sell the fake, explode the other way.", 5],
+          ["Scissors + Burst", "Scissors around the ball, then push into space.", 5],
+          ["Change of Direction", "Drag back, Cruyff turn, inside cut, outside cut.", 5],
+          ["Game Speed Combo", "Pick two moves and do them at speed with a burst after each.", 5]
+        ]
+      },
+      "Shooting": {
+        emoji: "🚀",
+        description: "Technique and finishing",
+        steps: [
+          ["Striking Form", "Plant foot beside ball, toe down, ankle locked, follow through.", 5],
+          ["Corners Challenge", "Aim low corners. Track how many hit the target.", 5],
+          ["First-Time Finish", "Roll the ball forward and strike with limited touches.", 5],
+          ["Power + Accuracy", "Alternate one power shot, one placed shot.", 5]
+        ]
+      },
+      "Weak Foot": {
+        emoji: "🦶",
+        description: "Build your other foot",
+        steps: [
+          ["Weak Foot Touches", "Foundations, toe taps, rollovers mostly with weak foot.", 5],
+          ["Weak Foot Passing", "Use a wall or partner. Keep passes clean and controlled.", 5],
+          ["Weak Foot Dribbling", "Small-space dribbles using mostly weak foot.", 5],
+          ["Weak Foot Challenge", "Combine dribble, pass, receive, and turn.", 5]
+        ]
+      },
+      "First Touch": {
+        emoji: "🧠",
+        description: "Prepare the next play",
+        steps: [
+          ["Cushion Touch", "Receive softly. Make the ball stop close to you.", 5],
+          ["Touch Across Body", "First touch moves the ball to your next action.", 5],
+          ["Directional Touch", "Touch left, right, forward, and backward on command.", 5],
+          ["Game-Like Reps", "Receive, scan, turn, pass. Repeat with pace.", 5]
+        ]
+      }
+    };
+
+    let selectedTopic = null;
+    let timerSeconds = 20 * 60;
+    let timerInterval = null;
+
+    function getLog() {
+      return JSON.parse(localStorage.getItem("trainingLog") || "[]");
+    }
+
+    function setLog(log) {
+      localStorage.setItem("trainingLog", JSON.stringify(log));
+      renderLog();
+      renderStats();
+    }
+
+    function savePlayer() {
+      const name = document.getElementById("playerName").value.trim();
+      localStorage.setItem("playerName", name);
+      alert(name ? `Saved. Let's go, ${name}!` : "Name cleared.");
+    }
+
+    function renderTopics() {
+      const wrap = document.getElementById("topics");
+      wrap.innerHTML = "";
+      Object.entries(plans).forEach(([name, plan]) => {
+        const btn = document.createElement("button");
+        btn.className = "topic";
+        btn.innerHTML = `${plan.emoji} ${name}<small>${plan.description}</small>`;
+        btn.onclick = () => showPlan(name);
+        wrap.appendChild(btn);
+      });
+    }
+
+    function showPlan(name) {
+      selectedTopic = name;
+      const plan = plans[name];
+      document.getElementById("planCard").classList.remove("hidden");
+      document.getElementById("planName").textContent = `${plan.emoji} ${name}`;
+      document.getElementById("notes").value = "";
+
+      const steps = document.getElementById("steps");
+      steps.innerHTML = "";
+      plan.steps.forEach((step, i) => {
+        const item = document.createElement("div");
+        item.className = "step";
+        item.innerHTML = `
+          <input type="checkbox" />
+          <div><b>${i + 1}. ${step[0]}</b><span>${step[1]}</span></div>
+          <div class="minutes">${step[2]}m</div>
+        `;
+        steps.appendChild(item);
+      });
+
+      resetTimer();
+      document.getElementById("planCard").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function hidePlan() {
+      document.getElementById("planCard").classList.add("hidden");
+      pauseTimer();
+    }
+
+    function updateTimerDisplay() {
+      const min = Math.floor(timerSeconds / 60).toString().padStart(2, "0");
+      const sec = (timerSeconds % 60).toString().padStart(2, "0");
+      document.getElementById("timer").textContent = `${min}:${sec}`;
+    }
+
+    function startTimer() {
+      if (timerInterval) return;
+      timerInterval = setInterval(() => {
+        if (timerSeconds > 0) {
+          timerSeconds--;
+          updateTimerDisplay();
+        } else {
+          pauseTimer();
+          alert("Time! Great work.");
+        }
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+
+    function resetTimer() {
+      pauseTimer();
+      timerSeconds = 20 * 60;
+      updateTimerDisplay();
+    }
+
+    function completeSession() {
+      if (!selectedTopic) return;
+
+      const player = localStorage.getItem("playerName") || document.getElementById("playerName").value || "Player";
+      const notes = document.getElementById("notes").value.trim();
+      const log = getLog();
+
+      log.unshift({
+        player,
+        topic: selectedTopic,
+        minutes: 20,
+        notes,
+        date: new Date().toISOString()
+      });
+
+      setLog(log);
+      alert("Session logged. Nice work!");
+      hidePlan();
+    }
+
+    function renderLog() {
+      const log = getLog();
+      const list = document.getElementById("logList");
+
+      if (!log.length) {
+        list.innerHTML = `<div class="empty">No sessions yet. Pick a topic and get your first one done.</div>`;
+        return;
+      }
+
+      list.innerHTML = log.map(item => {
+        const d = new Date(item.date);
+        return `
+          <div class="log-item">
+            <b>${item.topic} · ${item.minutes} min</b>
+            <span>${d.toLocaleDateString()} at ${d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+            ${item.notes ? `<p style="margin:8px 0 0;color:var(--muted)">${item.notes}</p>` : ""}
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderStats() {
+      const log = getLog();
+      document.getElementById("totalSessions").textContent = log.length;
+      document.getElementById("totalMinutes").textContent = log.reduce((sum, x) => sum + x.minutes, 0);
+
+      const counts = {};
+      log.forEach(x => counts[x.topic] = (counts[x.topic] || 0) + 1);
+      const favorite = Object.entries(counts).sort((a,b) => b[1] - a[1])[0];
+      document.getElementById("favorite").textContent = favorite ? favorite[0] : "—";
+
+      const uniqueDays = [...new Set(log.map(x => new Date(x.date).toDateString()))]
+        .map(x => new Date(x))
+        .sort((a,b) => b - a);
+
+      let streak = 0;
+      let today = new Date();
+      today.setHours(0,0,0,0);
+
+      for (let i = 0; i < uniqueDays.length; i++) {
+        const expected = new Date(today);
+        expected.setDate(today.getDate() - i);
+        if (uniqueDays[i].toDateString() === expected.toDateString()) streak++;
+        else break;
+      }
+
+      document.getElementById("streak").textContent = streak;
+    }
+
+    function clearLog() {
+      if (confirm("Clear all training sessions on this device?")) {
+        localStorage.removeItem("trainingLog");
+        renderLog();
+        renderStats();
+      }
+    }
+
+    function init() {
+      document.getElementById("playerName").value = localStorage.getItem("playerName") || "";
+      renderTopics();
+      renderLog();
+      renderStats();
+      updateTimerDisplay();
+    }
+
+    init();
+  </script>
+</body>
+</html>

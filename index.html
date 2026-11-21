@@ -2793,8 +2793,10 @@
       const title = document.getElementById("weeklyChallengeTitle");
       const desc = document.getElementById("weeklyChallengeDescription");
       const reward = document.getElementById("weeklyChallengeReward");
-      if (title) title.textContent = `⚡ ${weeklyChallenge.name || "Weekly Challenge"}`;
-      if (desc) desc.textContent = weeklyChallenge.description || "Complete this week's mission to earn bonus stars.";
+      // Winter display label: retain the original challenge name in Supabase and history.
+      // This also covers older active challenges named for September or a prior week.
+      if (title) title.textContent = "⚡ Coach Michael's Winter Challenge";
+      if (desc) desc.textContent = "Complete the winter challenge to earn bonus stars.";
       if (reward) reward.textContent = `Reward: ${"⭐".repeat(Math.min(weeklyChallenge.rewardStars || 5, 10))}${weeklyChallenge.rewardStars > 10 ? ` +${weeklyChallenge.rewardStars}` : ""}`;
     }
 

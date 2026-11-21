@@ -1393,7 +1393,7 @@
         <h3>🏆 Winter Leaderboard</h3>
         <button class="secondary" onclick="loadLeaderboard('sessions')">Refresh</button>
       </div>
-      <p style="color:var(--muted);margin-top:0;">Cumulative winter leaderboard with no weekly time limit. Stars include bonus rewards; sessions count real training sessions only.</p>
+      <p style="color:var(--muted);margin-top:0;">Winter leaderboard starts November 21, 2026 (Eastern Time), with no weekly time limit. Stars include bonus rewards; sessions count real training sessions only.</p>
       <div class="row" style="margin:12px 0 16px;">
         <button class="secondary active-tab" id="sortSessionsBtn" onclick="loadLeaderboard('sessions')">⚽ Most Sessions</button>
         <button class="secondary" id="sortStarsBtn" onclick="loadLeaderboard('stars')">⭐ Most Stars</button>
@@ -2077,7 +2077,10 @@
       return Object.entries(counts).sort((a,b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0]?.[0] || "—";
     }
 
-    async function fetchTeamPlayersAndLogs(limit = 500) {
+    // Winter season begins at midnight November 21, 2026 in Cincinnati (Eastern Time).
+    const WINTER_LEADERBOARD_START = "2026-11-21T05:00:00.000Z";
+
+    async function fetchTeamPlayersAndLogs(limit = 500, since = null) {
       const teamId = await ensureTeam();
       const { data: players, error: playersError } = await supabaseClient
         .from("players")
@@ -2089,10 +2092,12 @@
       const playerIds = (players || []).map(p => p.id);
       if (!playerIds.length) return { teamId, players: [], logs: [] };
 
-      const { data: logs, error: logsError } = await supabaseClient
+      let logsQuery = supabaseClient
         .from("training_logs")
         .select("id,player_id,topic,stars_earned,completed_at,notes,challenge_name")
-        .in("player_id", playerIds)
+        .in("player_id", playerIds);
+      if (since) logsQuery = logsQuery.gte("completed_at", since);
+      const { data: logs, error: logsError } = await logsQuery
         .order("completed_at", { ascending: false })
         .limit(limit);
       if (logsError) throw logsError;
@@ -2157,7 +2162,7 @@
       }
 
       try {
-        const { players, logs } = await fetchTeamPlayersAndLogs(5000);
+        const { players, logs } = await fetchTeamPlayersAndLogs(5000, WINTER_LEADERBOARD_START);
 
         const byPlayer = {};
         players.forEach(p => byPlayer[p.id] = { name: p.name, stars: 0, sessions: 0 });

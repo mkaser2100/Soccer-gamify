@@ -1367,11 +1367,11 @@
 
     <section class="quick-actions-card">
       <div>
-        <h3>🏆 Summer Leaderboard</h3>
-        <p>Cumulative summer rankings by stars or sessions.</p>
+        <h3>🏆 Winter Leaderboard</h3>
+        <p>Cumulative winter rankings by stars or sessions.</p>
       </div>
       <div class="quick-actions">
-        <button class="secondary" id="tabLeaderboard" onclick="showStatsPanel('leaderboardPanel', () => loadLeaderboard('sessions'), this)">🏆 Summer Leaderboard</button>
+        <button class="secondary" id="tabLeaderboard" onclick="showStatsPanel('leaderboardPanel', () => loadLeaderboard('sessions'), this)">🏆 Winter Leaderboard</button>
         <button class="secondary" id="tabMyStats" onclick="showStatsPanel('playerProfilePanel', loadPlayerProfile, this)">👤 My Stats</button>
         <button class="secondary" id="tabTeamGoal" onclick="showStatsPanel('monthlyChallengePanel', loadMonthlyChallenge, this)">🌙 Team Goal</button>
 </div>
@@ -1390,10 +1390,10 @@
 
     <section class="leaderboard-panel hidden" id="leaderboardPanel">
       <div class="plan-title">
-        <h3>🏆 Summer Leaderboard</h3>
+        <h3>🏆 Winter Leaderboard</h3>
         <button class="secondary" onclick="loadLeaderboard('sessions')">Refresh</button>
       </div>
-      <p style="color:var(--muted);margin-top:0;">Cumulative summer leaderboard with no weekly time limit. Stars include bonus rewards; sessions count real training sessions only.</p>
+      <p style="color:var(--muted);margin-top:0;">Cumulative winter leaderboard with no weekly time limit. Stars include bonus rewards; sessions count real training sessions only.</p>
       <div class="row" style="margin:12px 0 16px;">
         <button class="secondary active-tab" id="sortSessionsBtn" onclick="loadLeaderboard('sessions')">⚽ Most Sessions</button>
         <button class="secondary" id="sortStarsBtn" onclick="loadLeaderboard('stars')">⭐ Most Stars</button>
@@ -2180,7 +2180,7 @@
           });
 
         if (!rows.length) {
-          list.innerHTML = `<div class="empty">No summer leaderboard stats yet. Log a session to get started.</div>`;
+          list.innerHTML = `<div class="empty">No winter leaderboard stats yet. Log a session to get started.</div>`;
           return;
         }
 
@@ -2203,7 +2203,7 @@
         `;
       } catch (err) {
         console.error(err);
-        list.innerHTML = `<div class="empty">Could not load Summer Leaderboard: ${err.message}</div>`;
+        list.innerHTML = `<div class="empty">Could not load Winter Leaderboard: ${err.message}</div>`;
       }
     }
 
